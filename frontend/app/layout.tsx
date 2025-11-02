@@ -12,6 +12,20 @@ const vazir = Vazirmatn({
 export const metadata: Metadata = {
   title: '🔍 موتور جست‌وجوی فارسی',
   description: 'موتور جست‌وجوی هوشمند فارسی با هوش مصنوعی',
+  viewport: {
+    width: 'device-width',
+    initialScale: 1,
+    maximumScale: 5,
+    userScalable: true,
+  },
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#0ea5e9' },
+    { media: '(prefers-color-scheme: dark)', color: '#0284c7' },
+  ],
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+  },
 }
 
 export default function RootLayout({

@@ -25,6 +25,17 @@ module.exports = {
           900: '#0c4a6e',
         },
       },
+      animation: {
+        'spin-slow': 'spin 3s linear infinite',
+      },
+      transitionDuration: {
+        '400': '400ms',
+        '600': '600ms',
+        '800': '800ms',
+      },
+      backdropBlur: {
+        xs: '2px',
+      },
     },
   },
   plugins: [],
