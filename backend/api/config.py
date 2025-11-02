@@ -1,12 +1,12 @@
 """
-??????? ? ???????? API
+تنظیمات و پیکربندی API
 """
 from pydantic_settings import BaseSettings
 from typing import Optional
 
 
 class Settings(BaseSettings):
-    """??????? ???? ??????"""
+    """تنظیمات اصلی برنامه"""
     
     # OpenAI Configuration
     openai_api_key: str = "sk-xxxx"
@@ -38,11 +38,11 @@ class Settings(BaseSettings):
         case_sensitive = False
 
 
-# ??????? ??????
+# تنظیمات سراسری
 settings = Settings()
 
 
 def update_openai_config(api_key: str, base_url: str):
-    """??????????? ??????? OpenAI"""
+    """به‌روزرسانی تنظیمات OpenAI"""
     settings.openai_api_key = api_key
     settings.openai_base_url = base_url

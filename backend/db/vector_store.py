@@ -1,5 +1,5 @@
 """
-Vector Store ???? ????? ? ???????? Embeddings ?? Qdrant
+Vector Store برای ذخیره و جست‌وجوی Embeddings با Qdrant
 """
 from typing import List, Dict, Any, Optional
 from qdrant_client import QdrantClient
@@ -10,24 +10,24 @@ from api.config import settings
 
 
 class VectorStore:
-    """???? Vector Store ???? ?????? Embeddings"""
+    """کلاس Vector Store برای مدیریت Embeddings"""
     
     def __init__(self):
         self.collection_name = settings.qdrant_collection_name
         self.embedding_model = SentenceTransformer(settings.embedding_model)
         self.embedding_dim = self.embedding_model.get_sentence_embedding_dimension()
         
-        # ????? ?? Qdrant (???? in-memory ???? MVP)
-        self.client = QdrantClient(":memory:")  # ?? ?? settings.qdrant_url ??????? ????
+        # اتصال به Qdrant (حالت in-memory برای MVP)
+        self.client = QdrantClient(":memory:")  # یا از settings.qdrant_url استفاده کنید
         
-        # ????? ?????? ?? ???? ??? ????
+        # ایجاد کالکشن در صورت عدم وجود
         self._init_collection()
     
     def _init_collection(self):
-        """????? ?????? ?? ???? ??? ????"""
+        """ایجاد کالکشن در صورت عدم وجود"""
         try:
             self.client.get_collection(self.collection_name)
-            print(f"? ?????? {self.collection_name} ?? ??? ????? ???")
+            print(f"✅ کالکشن {self.collection_name} از قبل موجود است")
         except:
             self.client.create_collection(
                 collection_name=self.collection_name,
@@ -36,10 +36,10 @@ class VectorStore:
                     distance=Distance.COSINE
                 )
             )
-            print(f"? ?????? {self.collection_name} ????? ??")
+            print(f"✅ کالکشن {self.collection_name} ایجاد شد")
     
     def _generate_id(self, text: str) -> str:
-        """????? ID ???? ???? ???"""
+        """تولید ID یکتا برای متن"""
         return hashlib.md5(text.encode()).hexdigest()
     
     def add_documents(
@@ -47,18 +47,18 @@ class VectorStore:
         texts: List[str],
         metadatas: Optional[List[Dict[str, Any]]] = None
     ) -> List[str]:
-        """?????? ????? ?? Vector Store"""
+        """افزودن اسناد به Vector Store"""
         
         if metadatas is None:
             metadatas = [{}] * len(texts)
         
-        # ????? Embeddings
+        # تولید Embeddings
         embeddings = self.embedding_model.encode(texts, show_progress_bar=True)
         
-        # ????? IDs
+        # تولید IDs
         ids = [self._generate_id(text) for text in texts]
         
-        # ????? Points
+        # ایجاد Points
         points = []
         for i, (text, embedding, metadata) in enumerate(zip(texts, embeddings, metadatas)):
             point = PointStruct(
@@ -71,13 +71,13 @@ class VectorStore:
             )
             points.append(point)
         
-        # ?????? ?? Qdrant
+        # افزودن به Qdrant
         self.client.upsert(
             collection_name=self.collection_name,
             points=points
         )
         
-        print(f"? {len(texts)} ??? ?? Vector Store ????? ??")
+        print(f"✅ {len(texts)} سند به Vector Store اضافه شد")
         return ids
     
     def search(
@@ -86,12 +86,12 @@ class VectorStore:
         top_k: int = 5,
         score_threshold: float = 0.5
     ) -> List[Dict[str, Any]]:
-        """???????? ?????? ?? Vector Store"""
+        """جست‌وجوی معنایی در Vector Store"""
         
-        # ????? Embedding ???? query
+        # تولید Embedding برای query
         query_embedding = self.embedding_model.encode([query])[0]
         
-        # ??????? ?? Qdrant
+        # جست‌وجو در Qdrant
         results = self.client.search(
             collection_name=self.collection_name,
             query_vector=query_embedding.tolist(),
@@ -99,7 +99,7 @@ class VectorStore:
             score_threshold=score_threshold
         )
         
-        # ????? ?????
+        # تبدیل نتایج
         documents = []
         for result in results:
             documents.append({
@@ -111,10 +111,10 @@ class VectorStore:
         return documents
     
     def delete_collection(self):
-        """??? ??????"""
+        """حذف کالکشن"""
         self.client.delete_collection(self.collection_name)
-        print(f"? ?????? {self.collection_name} ??? ??")
+        print(f"✅ کالکشن {self.collection_name} حذف شد")
 
 
-# ????? ??????
+# نمونه سراسری
 vector_store = VectorStore()

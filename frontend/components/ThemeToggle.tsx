@@ -9,7 +9,7 @@ export default function ThemeToggle() {
     <button
       onClick={toggleTheme}
       className="fixed top-4 left-4 p-3 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors shadow-lg z-50"
-      aria-label="????? ??"
+      aria-label="تغییر تم"
     >
       {theme === 'light' ? (
         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">

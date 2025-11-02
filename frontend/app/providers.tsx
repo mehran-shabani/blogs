@@ -17,13 +17,13 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     setMounted(true)
-    // ?????? ?? ?? localStorage
+    // خواندن تم از localStorage
     const savedTheme = localStorage.getItem('theme') as Theme
     if (savedTheme) {
       setTheme(savedTheme)
       document.documentElement.classList.toggle('dark', savedTheme === 'dark')
     } else {
-      // ????? ??????? ?????
+      // بررسی تنظیمات سیستم
       const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
       setTheme(systemTheme)
       document.documentElement.classList.toggle('dark', systemTheme === 'dark')

@@ -1,5 +1,5 @@
 """
-?????? Firecrawl ???? ????? ????? ?? ?????
+کلاینت Firecrawl برای کراول صفحات وب فارسی
 """
 import requests
 from typing import Dict, List, Optional, Any
@@ -7,14 +7,14 @@ from api.config import settings
 
 
 class FirecrawlClient:
-    """?????? Firecrawl ???? ??????? ?????? ??"""
+    """کلاینت Firecrawl برای استخراج محتوای وب"""
     
     def __init__(self):
         self.api_key = settings.firecrawl_api_key
         self.base_url = "https://api.firecrawl.dev/v1"
     
     def scrape_url(self, url: str) -> Optional[Dict[str, Any]]:
-        """??????? ?????? ?? URL"""
+        """استخراج محتوای یک URL"""
         
         if not self.api_key:
             print("Firecrawl API key not configured")
@@ -49,11 +49,11 @@ class FirecrawlClient:
                     "metadata": data.get("data", {}).get("metadata", {})
                 }
             else:
-                print(f"??? ?? Firecrawl: {response.status_code} - {response.text}")
+                print(f"خطا در Firecrawl: {response.status_code} - {response.text}")
                 return None
                 
         except Exception as e:
-            print(f"??? ?? ????? ?? Firecrawl: {e}")
+            print(f"خطا در اتصال به Firecrawl: {e}")
             return None
     
     def crawl_website(
@@ -62,7 +62,7 @@ class FirecrawlClient:
         max_pages: int = 10,
         include_paths: Optional[List[str]] = None
     ) -> List[Dict[str, Any]]:
-        """????? ????? ???? ?? ?? ???????"""
+        """کراول چندین صفحه از یک وب‌سایت"""
         
         if not self.api_key:
             print("Firecrawl API key not configured")
@@ -86,7 +86,7 @@ class FirecrawlClient:
             payload["includePaths"] = include_paths
         
         try:
-            # ???? ?????
+            # شروع کراول
             response = requests.post(
                 f"{self.base_url}/crawl",
                 headers=headers,
@@ -98,7 +98,7 @@ class FirecrawlClient:
                 data = response.json()
                 crawl_id = data.get("id")
                 
-                # ?????? ????? ?????
+                # دریافت نتایج کراول
                 status_response = requests.get(
                     f"{self.base_url}/crawl/{crawl_id}",
                     headers=headers,
@@ -112,19 +112,19 @@ class FirecrawlClient:
             return []
             
         except Exception as e:
-            print(f"??? ?? ?????: {e}")
+            print(f"خطا در کراول: {e}")
             return []
     
     def search_web(self, query: str, max_results: int = 5) -> List[Dict[str, Any]]:
-        """??????? ?? ?? ? ??????? ?????"""
+        """جست‌وجو در وب و استخراج نتایج"""
         
-        # ???? MVP? ?? Google Search API ?? ???? ????? ??????? ???????
-        # ??? ?? ?????????? ???? ???
+        # برای MVP، از Google Search API یا سایر منابع استفاده می‌کنیم
+        # این یک پیاده‌سازی ساده است
         
-        # ?? ???? ?????? ??????? ?? ?????????? ????? SerpAPI ??????? ???
+        # در نسخه واقعی، می‌توان از سرویس‌هایی مانند SerpAPI استفاده کرد
         search_results = []
         
-        # ???? ????? ?? ?? ???? URL ??? ??????? ??????? ???????
+        # برای الان، از یک لیست URL های پیش‌فرض استفاده می‌کنیم
         default_persian_sites = [
             f"https://fa.wikipedia.org/wiki/{query}",
             f"https://www.google.com/search?q={query}+site:ir",
@@ -138,5 +138,5 @@ class FirecrawlClient:
         return search_results
 
 
-# ????? ??????
+# نمونه سراسری
 firecrawl_client = FirecrawlClient()

@@ -25,7 +25,7 @@ export default function SearchBar({ onSearch, isLoading }: SearchBarProps) {
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="???? ??? ?? ??????..."
+          placeholder="سوال خود را بپرسید..."
           disabled={isLoading}
           className="w-full px-6 py-4 pr-14 text-lg rounded-2xl border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:border-primary-500 focus:outline-none disabled:opacity-50 transition-all shadow-lg"
         />
@@ -46,7 +46,7 @@ export default function SearchBar({ onSearch, isLoading }: SearchBarProps) {
           )}
         </button>
         <div className="absolute right-2 top-1/2 -translate-y-1/2">
-          <span className="text-2xl">??</span>
+          <span className="text-2xl">🔍</span>
         </div>
       </div>
       
@@ -60,7 +60,7 @@ export default function SearchBar({ onSearch, isLoading }: SearchBarProps) {
             className="w-4 h-4 text-primary-500 rounded focus:ring-primary-500"
           />
           <span className="text-sm text-gray-600 dark:text-gray-400">
-            ??????? ?? ?? (?? ???? ????)
+            جست‌وجو در وب (در صورت نیاز)
           </span>
         </label>
       </div>

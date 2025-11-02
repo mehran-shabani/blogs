@@ -25,13 +25,13 @@ export default function AdminPage() {
       setCurrentConfig(response.data)
       setBaseUrl(response.data.base_url)
     } catch (err) {
-      console.error('??? ?? ?????? ???????:', err)
+      console.error('خطا در دریافت تنظیمات:', err)
     }
   }
 
   const handleSaveConfig = async () => {
     if (!apiKey || !baseUrl) {
-      setMessage({ type: 'error', text: '????? ??? ?????? ?? ?? ????' })
+      setMessage({ type: 'error', text: 'لطفاً همه فیلدها را پر کنید' })
       return
     }
 
@@ -44,13 +44,13 @@ export default function AdminPage() {
         base_url: baseUrl
       })
 
-      setMessage({ type: 'success', text: '? ??????? ?? ?????? ????? ??' })
+      setMessage({ type: 'success', text: '✅ تنظیمات با موفقیت ذخیره شد' })
       setApiKey('')
       loadConfig()
     } catch (err: any) {
       setMessage({ 
         type: 'error', 
-        text: err.response?.data?.detail || '??? ?? ????? ???????' 
+        text: err.response?.data?.detail || 'خطا در ذخیره تنظیمات' 
       })
     } finally {
       setIsLoading(false)
@@ -59,7 +59,7 @@ export default function AdminPage() {
 
   const handleIngestUrl = async () => {
     if (!ingestUrl) {
-      setMessage({ type: 'error', text: '????? URL ?? ???? ????' })
+      setMessage({ type: 'error', text: 'لطفاً URL را وارد کنید' })
       return
     }
 
@@ -73,13 +73,13 @@ export default function AdminPage() {
 
       setMessage({ 
         type: 'success', 
-        text: response.data.message || '? URL ?? ?????? ????? ??' 
+        text: response.data.message || '✅ URL با موفقیت اضافه شد' 
       })
       setIngestUrl('')
     } catch (err: any) {
       setMessage({ 
         type: 'error', 
-        text: err.response?.data?.detail || '??? ?? ?????? URL' 
+        text: err.response?.data?.detail || 'خطا در افزودن URL' 
       })
     } finally {
       setIsLoading(false)
@@ -91,24 +91,24 @@ export default function AdminPage() {
       <ThemeToggle />
       
       <div className="container mx-auto px-4 py-12 max-w-4xl">
-        {/* ??? */}
+        {/* هدر */}
         <div className="mb-8">
           <Link 
             href="/"
             className="inline-flex items-center gap-2 text-primary-600 dark:text-primary-400 hover:underline mb-4"
           >
-            ? ?????? ?? ???? ????
+            ← بازگشت به صفحه اصلی
           </Link>
           
           <h1 className="text-4xl font-bold mb-2 text-gray-800 dark:text-gray-200">
-            ?? ??? ??????
+            ⚙️ پنل مدیریت
           </h1>
           <p className="text-gray-600 dark:text-gray-400">
-            ??????? ????? ??????? ? ?????? ?????
+            تنظیمات موتور جست‌وجو و مدیریت محتوا
           </p>
         </div>
 
-        {/* ????? ???? */}
+        {/* نمایش پیام */}
         {message && (
           <div className={`mb-6 p-4 rounded-xl ${
             message.type === 'success' 
@@ -119,11 +119,11 @@ export default function AdminPage() {
           </div>
         )}
 
-        {/* ??????? ???? */}
+        {/* تنظیمات فعلی */}
         {currentConfig && (
           <div className="mb-8 p-6 bg-blue-50 dark:bg-gray-800 rounded-2xl border border-blue-200 dark:border-gray-700">
             <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">
-              ?? ??????? ????
+              📊 تنظیمات فعلی
             </h2>
             <div className="space-y-2 text-sm">
               <p className="text-gray-700 dark:text-gray-300">
@@ -140,10 +140,10 @@ export default function AdminPage() {
         )}
 
         <div className="space-y-6">
-          {/* ??? ??????? OpenAI */}
+          {/* بخش تنظیمات OpenAI */}
           <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 border border-gray-200 dark:border-gray-700">
             <h2 className="text-2xl font-semibold mb-6 text-gray-800 dark:text-gray-200">
-              ?? ??????? OpenAI
+              🔑 تنظیمات OpenAI
             </h2>
             
             <div className="space-y-4">
@@ -178,21 +178,21 @@ export default function AdminPage() {
                 disabled={isLoading}
                 className="w-full px-6 py-3 bg-primary-500 hover:bg-primary-600 disabled:bg-gray-400 text-white rounded-xl font-medium transition-colors"
               >
-                {isLoading ? '?? ??? ?????...' : '????? ???????'}
+                {isLoading ? 'در حال ذخیره...' : 'ذخیره تنظیمات'}
               </button>
             </div>
           </div>
 
-          {/* ??? ?????? URL */}
+          {/* بخش افزودن URL */}
           <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 border border-gray-200 dark:border-gray-700">
             <h2 className="text-2xl font-semibold mb-6 text-gray-800 dark:text-gray-200">
-              ?? ?????? ????? ?? ??
+              🌐 افزودن محتوا از وب
             </h2>
             
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">
-                  ???? URL
+                  آدرس URL
                 </label>
                 <input
                   type="url"
@@ -202,7 +202,7 @@ export default function AdminPage() {
                   className="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 focus:border-primary-500 focus:outline-none text-gray-900 dark:text-gray-100"
                 />
                 <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
-                  ?? ?????? URL? ?????? ?? ??????? ? ?? ?????? ???? ????? ??????
+                  با افزودن URL، محتوای آن استخراج و به پایگاه داده اضافه می‌شود
                 </p>
               </div>
 
@@ -211,7 +211,7 @@ export default function AdminPage() {
                 disabled={isLoading}
                 className="w-full px-6 py-3 bg-purple-500 hover:bg-purple-600 disabled:bg-gray-400 text-white rounded-xl font-medium transition-colors"
               >
-                {isLoading ? '?? ??? ??????...' : '?????? URL'}
+                {isLoading ? 'در حال پردازش...' : 'افزودن URL'}
               </button>
             </div>
           </div>

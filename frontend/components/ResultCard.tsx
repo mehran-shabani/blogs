@@ -11,16 +11,16 @@ interface ResultCardProps {
 export default function ResultCard({ answer, sources, query }: ResultCardProps) {
   return (
     <div className="w-full max-w-3xl mx-auto mt-8 space-y-6 animate-fadeIn">
-      {/* ???? ???? */}
+      {/* پاسخ اصلی */}
       <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 border border-gray-200 dark:border-gray-700">
         <div className="flex items-start gap-3 mb-4">
-          <span className="text-3xl">??</span>
+          <span className="text-3xl">🤖</span>
           <div className="flex-1">
             <h3 className="text-lg font-semibold mb-2 text-gray-800 dark:text-gray-200">
-              ???? ??????
+              پاسخ هوشمند
             </h3>
             <div className="text-sm text-gray-500 dark:text-gray-400 mb-4">
-              ????: <span className="font-medium">{query}</span>
+              برای: <span className="font-medium">{query}</span>
             </div>
           </div>
         </div>
@@ -41,13 +41,13 @@ export default function ResultCard({ answer, sources, query }: ResultCardProps) 
         </div>
       </div>
 
-      {/* ????? */}
+      {/* منابع */}
       {sources && sources.length > 0 && (
         <div className="bg-gradient-to-br from-primary-50 to-blue-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl shadow-lg p-6 border border-primary-200 dark:border-gray-700">
           <div className="flex items-center gap-2 mb-4">
-            <span className="text-2xl">??</span>
+            <span className="text-2xl">📚</span>
             <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200">
-              ????? ? ?????
+              منابع و مراجع
             </h3>
           </div>
           

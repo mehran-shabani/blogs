@@ -1,5 +1,5 @@
 """
-API Endpoints ???? ???????
+API Endpoints برای جست‌وجو
 """
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, HttpUrl
@@ -12,14 +12,14 @@ router = APIRouter()
 
 
 class SearchRequest(BaseModel):
-    """??? ??????? ???????"""
+    """مدل درخواست جست‌وجو"""
     query: str
     use_web_search: bool = False
     top_k: int = 5
 
 
 class SearchResponse(BaseModel):
-    """??? ???? ???????"""
+    """مدل پاسخ جست‌وجو"""
     answer: str
     sources: List[str]
     query: str
@@ -27,18 +27,18 @@ class SearchResponse(BaseModel):
 
 
 class IngestURLRequest(BaseModel):
-    """??? ??????? ?????? URL"""
+    """مدل درخواست افزودن URL"""
     url: HttpUrl
 
 
 class ConfigRequest(BaseModel):
-    """??? ??????? ???????"""
+    """مدل درخواست تنظیمات"""
     api_key: str
     base_url: str
 
 
 class ConfigResponse(BaseModel):
-    """??? ???? ???????"""
+    """مدل پاسخ تنظیمات"""
     api_key: str
     base_url: str
     model: str
@@ -47,11 +47,11 @@ class ConfigResponse(BaseModel):
 @router.post("/search", response_model=SearchResponse)
 async def search(request: SearchRequest):
     """
-    ???????? ?????? ?? RAG
+    جست‌وجوی هوشمند با RAG
     
-    - **query**: ???? ????? ?????
-    - **use_web_search**: ??????? ?? ???????? ?? (???????: False)
-    - **top_k**: ????? ????? (???????: 5)
+    - **query**: پرسش فارسی کاربر
+    - **use_web_search**: استفاده از جست‌وجوی وب (پیش‌فرض: False)
+    - **top_k**: تعداد نتایج (پیش‌فرض: 5)
     """
     try:
         result = rag_engine.process_query(
@@ -61,29 +61,29 @@ async def search(request: SearchRequest):
         )
         return SearchResponse(**result)
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"??? ?? ?????? ???????: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"خطا در پردازش جست‌وجو: {str(e)}")
 
 
 @router.post("/ingest-url")
 async def ingest_url(request: IngestURLRequest):
     """
-    ?????? URL ?? ?????? ????
+    افزودن URL به پایگاه داده
     
-    - **url**: ???? ???? ?? ???? ????? ? ??????
+    - **url**: آدرس صفحه وب برای کراول و افزودن
     """
     try:
         result = rag_engine.ingest_url(str(request.url))
         return result
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"??? ?? ?????? URL: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"خطا در افزودن URL: {str(e)}")
 
 
 @router.get("/config", response_model=ConfigResponse)
 async def get_config():
     """
-    ?????? ??????? ???? OpenAI
+    دریافت تنظیمات فعلی OpenAI
     """
-    # ????? ??? 4 ??????? ??? API Key
+    # نمایش فقط 4 کاراکتر اول API Key
     masked_key = settings.openai_api_key[:10] + "..." if len(settings.openai_api_key) > 10 else "***"
     
     return ConfigResponse(
@@ -96,28 +96,28 @@ async def get_config():
 @router.post("/config")
 async def update_config(request: ConfigRequest):
     """
-    ??????????? ??????? OpenAI
+    به‌روزرسانی تنظیمات OpenAI
     
-    - **api_key**: ???? API ????
-    - **base_url**: ???? Base URL ????
+    - **api_key**: کلید API جدید
+    - **base_url**: آدرس Base URL جدید
     """
     try:
-        # ??????????? ???????
+        # به‌روزرسانی تنظیمات
         update_openai_config(request.api_key, request.base_url)
         openai_client.update_config(request.api_key, request.base_url)
         
         return {
             "success": True,
-            "message": "? ??????? ?? ?????? ??????????? ??"
+            "message": "✅ تنظیمات با موفقیت به‌روزرسانی شد"
         }
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"??? ?? ??????????? ???????: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"خطا در به‌روزرسانی تنظیمات: {str(e)}")
 
 
 @router.get("/health")
 async def health_check():
-    """????? ????? API"""
+    """بررسی سلامت API"""
     return {
         "status": "healthy",
-        "message": "?? API ?? ??? ???? ???"
+        "message": "🚀 API در حال اجرا است"
     }
