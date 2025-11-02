@@ -1,0 +1,66 @@
+name: پیشنهاد ویژگی
+description: ایده یا قابلیتی که دوست دارید به پروژه افزوده شود را مطرح کنید
+title: "[Feature]: "
+labels:
+  - enhancement
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ممنون از اینکه ایده‌های خود را برای بهبود پروژه با ما به اشتراک می‌گذارید.
+
+  - type: checkboxes
+    id: prerequisites
+    attributes:
+      label: پیش‌نیازها
+      options:
+        - label: ابتدا در Issues جست‌وجو کردم و اطمینان یافتم که این پیشنهاد قبلاً مطرح نشده است.
+          required: true
+        - label: `CONTRIBUTING.md` و نقشه‌راه موجود در `README.md` را بررسی کرده‌ام.
+          required: true
+
+  - type: textarea
+    id: summary
+    attributes:
+      label: خلاصه پیشنهاد
+      placeholder: این ویژگی چیست و چه مشکلی را حل می‌کند؟
+    validations:
+      required: true
+
+  - type: textarea
+    id: motivation
+    attributes:
+      label: انگیزه و ارزش
+      description: توضیح دهید چرا این ویژگی برای کاربران یا توسعه‌دهندگان مهم است.
+      placeholder: تاثیر این ویژگی بر تجربه کاربر یا فرآیند توسعه...
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: راهکار پیشنهادی
+      description: اگر راه‌حل مشخصی در ذهن دارید آن را توضیح دهید. (UI، API، ساختار داده و ...)
+      placeholder: پیشنهاد می‌کنم...
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: راهکارهای جایگزین
+      description: آیا گزینه دیگری را بررسی کرده‌اید؟ نقاط قوت و ضعف آن چه بود؟
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: بخش پیشنهادی
+      multiple: true
+      options:
+        - Backend (FastAPI)
+        - Frontend (Next.js)
+        - پایگاه داده / Qdrant
+        - زیرساخت / DevOps
+        - مستندات
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: توضیحات تکمیلی
+      description: هر نکته یا مرجع اضافی (طراحی، لینک، مقاله) را اینجا بنویسید.
