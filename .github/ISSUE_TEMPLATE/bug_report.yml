@@ -1,0 +1,93 @@
+name: گزارش باگ
+description: گزارش خطا یا رفتار غیرمنتظره در بک‌اند یا فرانت‌اند پروژه
+title: "[Bug]: "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        از شما بابت گزارش باگ متشکریم! لطفاً تا جای ممکن اطلاعات کامل ارائه دهید تا بتوانیم مشکل را بازتولید و برطرف کنیم.
+
+  - type: checkboxes
+    id: prerequisites
+    attributes:
+      label: پیش‌نیازها
+      description: قبل از ثبت باگ، لطفاً این موارد را بررسی کنید.
+      options:
+        - label: README و `CONTRIBUTING.md` را مطالعه کرده‌ام.
+          required: true
+        - label: مطمئن شده‌ام که با آخرین نسخه شاخه `main` تست گرفته‌ام.
+          required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: بخش درگیر
+      description: کدام بخش پروژه تحت تأثیر قرار گرفته است؟
+      multiple: true
+      options:
+        - Backend (FastAPI)
+        - Frontend (Next.js)
+        - DevOps / CI
+        - مستندات
+
+  - type: textarea
+    id: description
+    attributes:
+      label: شرح مشکل
+      placeholder: توضیح دهید چه اتفاقی می‌افتد و پیام خطا چیست.
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: مراحل بازتولید
+      description: مراحل بازتولید را به ترتیب بنویسید.
+      placeholder: |
+        1. به مسیر ... بروید
+        2. دستور ... را اجرا کنید
+        3. رفتار ... دیده می‌شود
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: رفتار مورد انتظار
+      placeholder: انتظار داشتید چه اتفاقی بیفتد؟
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: رفتار فعلی
+      placeholder: چه چیزی مشاهده کردید؟
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: لاگ‌ها یا اسکرین‌شات‌ها
+      description: در صورت امکان، لاگ، اسکرین‌شات یا خروجی ترمینال را اضافه کنید.
+      placeholder: خروجی خطا یا تصویر...
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: اطلاعات محیط اجرا
+      description: نسخه‌ها و سیستم‌عامل مورد استفاده را مشخص کنید.
+      placeholder: |
+        - سیستم‌عامل: (مانند Ubuntu 22.04)
+        - Python: (مانند 3.11)
+        - Node.js: (مانند 20.x)
+        - نسخه پروژه یا commit hash
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: توضیحات تکمیلی
+      description: هر اطلاعات دیگری که به حل مشکل کمک می‌کند.

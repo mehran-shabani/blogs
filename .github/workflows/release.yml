@@ -1,0 +1,243 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - '**.md'
+      - '.github/**'
+      - '!.github/workflows/release.yml'
+  workflow_dispatch:
+    inputs:
+      version_bump:
+        description: 'Version bump type'
+        required: true
+        default: 'patch'
+        type: choice
+        options:
+          - major
+          - minor
+          - patch
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  # Job 1: Create and push tag
+  create-tag:
+    name: Create Tag
+    runs-on: ubuntu-latest
+    outputs:
+      new_tag: ${{ steps.tag_version.outputs.new_tag }}
+      changelog: ${{ steps.tag_version.outputs.changelog }}
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get latest tag
+        id: get_latest_tag
+        run: |
+          # Get the latest tag or default to v1.0.0
+          LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v1.0.0")
+          echo "latest_tag=$LATEST_TAG" >> $GITHUB_OUTPUT
+          echo "Latest tag: $LATEST_TAG"
+
+      - name: Bump version and push tag
+        id: tag_version
+        uses: mathieudutour/github-tag-action@v6.1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          default_bump: ${{ github.event.inputs.version_bump || 'patch' }}
+          tag_prefix: v
+          create_annotated_tag: true
+          
+      - name: Display new tag
+        run: |
+          echo "New tag created: ${{ steps.tag_version.outputs.new_tag }}"
+          echo "Previous tag: ${{ steps.tag_version.outputs.previous_tag }}"
+
+  # Job 2: Build and push Docker images
+  build-and-push:
+    name: Build & Push Docker Images
+    needs: create-tag
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    strategy:
+      matrix:
+        component: [backend, frontend]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-${{ matrix.component }}
+          tags: |
+            type=semver,pattern={{version}},value=${{ needs.create-tag.outputs.new_tag }}
+            type=semver,pattern={{major}}.{{minor}},value=${{ needs.create-tag.outputs.new_tag }}
+            type=semver,pattern={{major}},value=${{ needs.create-tag.outputs.new_tag }}
+            type=raw,value=latest,enable={{is_default_branch}}
+            type=sha,prefix={{branch}}-
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./${{ matrix.component }}
+          file: ./${{ matrix.component }}/Dockerfile
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          platforms: linux/amd64,linux/arm64
+
+  # Job 3: Create GitHub Release
+  create-release:
+    name: Create Release
+    needs: [create-tag, build-and-push]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Generate changelog
+        id: changelog
+        run: |
+          PREV_TAG=$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || git rev-list --max-parents=0 HEAD)
+          NEW_TAG="${{ needs.create-tag.outputs.new_tag }}"
+          
+          echo "Generating changelog from $PREV_TAG to $NEW_TAG"
+          
+          # Generate changelog
+          CHANGELOG=$(git log ${PREV_TAG}..HEAD --pretty=format:"- %s (%h)" --no-merges)
+          
+          # Create release notes
+          cat > release_notes.md << EOF
+          # 🚀 Release $NEW_TAG
+          
+          ## 📝 تغییرات (Changes)
+          
+          $CHANGELOG
+          
+          ## 🐳 Docker Images
+          
+          ### Backend
+          \`\`\`bash
+          docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-backend:$NEW_TAG
+          \`\`\`
+          
+          ### Frontend
+          \`\`\`bash
+          docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-frontend:$NEW_TAG
+          \`\`\`
+          
+          ## 🚀 راه‌اندازی سریع (Quick Start)
+          
+          \`\`\`bash
+          # کلون کردن پروژه
+          git clone https://github.com/${{ github.repository }}.git
+          cd $(basename ${{ github.repository }})
+          git checkout $NEW_TAG
+          
+          # اجرا با Docker Compose
+          docker-compose up -d
+          \`\`\`
+          
+          ## 📦 فایل‌های اصلی (Assets)
+          
+          - Source code (zip)
+          - Source code (tar.gz)
+          - Docker Images در GitHub Container Registry
+          
+          ## 📖 مستندات
+          
+          - [README](https://github.com/${{ github.repository }}/blob/$NEW_TAG/README.md)
+          - [QUICKSTART](https://github.com/${{ github.repository }}/blob/$NEW_TAG/QUICKSTART.md)
+          - [ARCHITECTURE](https://github.com/${{ github.repository }}/blob/$NEW_TAG/ARCHITECTURE.md)
+          - [DOCKER](https://github.com/${{ github.repository }}/blob/$NEW_TAG/DOCKER.md)
+          
+          ---
+          
+          **تاریخ انتشار:** $(date +'%Y-%m-%d %H:%M:%S')
+          **نسخه قبلی:** $PREV_TAG
+          EOF
+          
+          cat release_notes.md
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ needs.create-tag.outputs.new_tag }}
+          name: Release ${{ needs.create-tag.outputs.new_tag }}
+          body_path: release_notes.md
+          draft: false
+          prerelease: false
+          generate_release_notes: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # Job 4: Update latest tag
+  update-latest:
+    name: Update Latest Tag
+    needs: [create-tag, build-and-push, create-release]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Update latest tag
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag -f latest
+          git push -f origin latest
+
+  # Job 5: Notify on completion
+  notify:
+    name: Notify Success
+    needs: [create-tag, build-and-push, create-release, update-latest]
+    runs-on: ubuntu-latest
+    if: success()
+    steps:
+      - name: Summary
+        run: |
+          echo "## ✅ Release Successful!" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 📌 Release Details" >> $GITHUB_STEP_SUMMARY
+          echo "- **Tag:** ${{ needs.create-tag.outputs.new_tag }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Docker Images:** Published to GHCR" >> $GITHUB_STEP_SUMMARY
+          echo "- **Release:** Created on GitHub" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 🐳 Docker Images" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          echo "docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-backend:${{ needs.create-tag.outputs.new_tag }}" >> $GITHUB_STEP_SUMMARY
+          echo "docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-frontend:${{ needs.create-tag.outputs.new_tag }}" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "🔗 [View Release](https://github.com/${{ github.repository }}/releases/tag/${{ needs.create-tag.outputs.new_tag }})" >> $GITHUB_STEP_SUMMARY
