@@ -16,6 +16,7 @@ pip install -r requirements.txt
 # Frontend (در ترمینال جدید)
 cd frontend
 npm install
+
 ```
 
 ### گام 2: تنظیم API Keys
@@ -32,9 +33,10 @@ cp .env.example .env
 cd frontend
 cp .env.local.example .env.local
 # معمولاً نیازی به تغییر نیست
+
 ```
 
-### گام 3: اجرا!
+### گام 3: اجرا
 
 ```bash
 # Backend (ترمینال 1)
@@ -44,13 +46,14 @@ python main.py
 # Frontend (ترمینال 2)
 cd frontend
 npm run dev
+
 ```
 
-✅ **تمام!** 
+✅ **تمام!**
 
-- Backend: http://localhost:8000
-- Frontend: http://localhost:3000
-- API Docs: http://localhost:8000/docs
+- Backend: <http://localhost:8000>
+- Frontend: <http://localhost:3000>
+- API Docs: <http://localhost:8000/docs>
 
 ## 🔧 یا با اسکریپت‌های خودکار
 
@@ -62,11 +65,12 @@ cd backend
 # Frontend
 cd frontend
 ./run.sh
+
 ```
 
 ## 🎪 تست سریع
 
-1. به http://localhost:3000 بروید
+1. به <http://localhost:3000> بروید
 2. به صفحه **تنظیمات** (Admin) بروید
 3. API Key خود را وارد کنید
 4. یک URL فارسی (مثلاً از ویکی‌پدیا) اضافه کنید
@@ -75,6 +79,7 @@ cd frontend
 ## ❓ مشکل دارید؟
 
 ### Backend اجرا نمی‌شود
+
 ```bash
 # بررسی Python version (باید 3.9+ باشد)
 python --version
@@ -82,9 +87,11 @@ python --version
 # نصب مجدد
 pip install --upgrade pip
 pip install -r requirements.txt
+
 ```
 
 ### Frontend اجرا نمی‌شود
+
 ```bash
 # بررسی Node version (باید 18+ باشد)
 node --version
@@ -92,9 +99,11 @@ node --version
 # پاک کردن و نصب مجدد
 rm -rf node_modules package-lock.json
 npm install
+
 ```
 
 ### API Key کار نمی‌کند
+
 - مطمئن شوید فایل `.env` در پوشه `backend` وجود دارد
 - API Key را از طریق صفحه Admin هم می‌توانید تنظیم کنید
 - سرور Backend را restart کنید

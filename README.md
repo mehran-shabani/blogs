@@ -15,7 +15,7 @@
 
 ## 🏗️ معماری پروژه
 
-```
+```txt
 project_root/
 ├── backend/                    # Backend FastAPI
 │   ├── main.py                # نقطه ورود اصلی
@@ -48,19 +48,23 @@ project_root/
 │   └── next.config.js         # تنظیمات Next.js
 │
 └── README.md                   # این فایل
+
 ```
 
 ## 📋 پیش‌نیازها
 
 ### Backend
+
 - Python 3.9 یا بالاتر
 - pip (Package Manager)
 
 ### Frontend
+
 - Node.js 18 یا بالاتر
 - npm یا yarn
 
 ### سرویس‌های خارجی (اختیاری)
+
 - **OpenAI API Key** یا API سازگار (مثل GapGPT)
 - **Firecrawl API Key** برای کراول وب (اختیاری)
 
@@ -71,6 +75,7 @@ project_root/
 ```bash
 git clone <repository-url>
 cd persian-search-engine
+
 ```
 
 ### 2️⃣ راه‌اندازی Backend
@@ -101,6 +106,7 @@ cp .env.example .env
 
 # اجرای سرور
 python main.py
+
 ```
 
 سرور Backend در آدرس `http://localhost:8000` اجرا می‌شود.
@@ -125,6 +131,7 @@ cp .env.local.example .env.local
 
 # اجرای سرور توسعه
 npm run dev
+
 ```
 
 Frontend در آدرس `http://localhost:3000` اجرا می‌شود.
@@ -142,15 +149,18 @@ Frontend در آدرس `http://localhost:3000` اجرا می‌شود.
 دو روش برای افزودن محتوا وجود دارد:
 
 #### روش اول: از طریق پنل مدیریت
+
 1. به صفحه Admin بروید
 2. در بخش "افزودن محتوا از وب"، URL مورد نظر را وارد کنید
 3. روی "افزودن URL" کلیک کنید
 
 #### روش دوم: استفاده از API
+
 ```bash
 curl -X POST "http://localhost:8000/api/ingest-url" \
   -H "Content-Type: application/json" \
   -d '{"url": "https://example.com/article"}'
+
 ```
 
 ### 3. جست‌وجو
@@ -163,6 +173,7 @@ curl -X POST "http://localhost:8000/api/ingest-url" \
 ## 🔌 API Endpoints
 
 ### جست‌وجو
+
 ```http
 POST /api/search
 Content-Type: application/json
@@ -172,9 +183,11 @@ Content-Type: application/json
   "use_web_search": false,
   "top_k": 5
 }
+
 ```
 
 ### افزودن URL
+
 ```http
 POST /api/ingest-url
 Content-Type: application/json
@@ -182,14 +195,18 @@ Content-Type: application/json
 {
   "url": "https://example.com/article"
 }
+
 ```
 
 ### دریافت تنظیمات
+
 ```http
 GET /api/config
+
 ```
 
 ### به‌روزرسانی تنظیمات
+
 ```http
 POST /api/config
 Content-Type: application/json
@@ -198,11 +215,14 @@ Content-Type: application/json
   "api_key": "sk-xxxxxxx",
   "base_url": "https://api.gapgpt.app/v1"
 }
+
 ```
 
 ### بررسی سلامت
+
 ```http
 GET /api/health
+
 ```
 
 ## 🛠️ تنظیمات پیشرفته
@@ -213,9 +233,11 @@ GET /api/health
 
 ```python
 embedding_model: str = "sentence-transformers/paraphrase-multilingual-mpnet-base-v2"
+
 ```
 
 می‌توانید مدل‌های دیگر مانند:
+
 - `sentence-transformers/LaBSE`
 - `HooshvareLab/bert-fa-base-uncased`
 
@@ -226,6 +248,7 @@ embedding_model: str = "sentence-transformers/paraphrase-multilingual-mpnet-base
 ```env
 QDRANT_URL=http://your-qdrant-server:6333
 QDRANT_API_KEY=your-api-key
+
 ```
 
 در فایل `backend/db/vector_store.py`:
@@ -239,6 +262,7 @@ self.client = QdrantClient(
     url=settings.qdrant_url,
     api_key=settings.qdrant_api_key
 )
+
 ```
 
 ### تغییر مدل OpenAI
@@ -247,11 +271,12 @@ self.client = QdrantClient(
 
 ```python
 openai_model: str = "gpt-4o-mini"  # یا gpt-4، gpt-3.5-turbo
+
 ```
 
 ## 📊 نمودار جریان داده
 
-```
+```txt
 کاربر → Frontend (Next.js)
            ↓
     POST /api/search
@@ -272,11 +297,13 @@ Vector Store   Firecrawl
     پاسخ هوشمند + منابع
            ↓
        Frontend
+
 ```
 
 ## 🎨 تم‌سازی
 
 فایل‌های مربوط به استایل:
+
 - `frontend/app/globals.css` - استایل‌های سراسری
 - `frontend/tailwind.config.js` - تنظیمات Tailwind
 - `frontend/app/providers.tsx` - مدیریت تم
@@ -286,25 +313,31 @@ Vector Store   Firecrawl
 ## 🐛 رفع مشکلات رایج
 
 ### Backend اجرا نمی‌شود
+
 ```bash
 # بررسی نصب وابستگی‌ها
 pip install -r requirements.txt
 
 # بررسی Python version
 python --version  # باید 3.9+ باشد
+
 ```
 
 ### Frontend اجرا نمی‌شود
+
 ```bash
 # پاک کردن node_modules و نصب مجدد
 rm -rf node_modules package-lock.json
 npm install
+
 ```
 
 ### خطای CORS
+
 مطمئن شوید که Backend در آدرس صحیح در حال اجراست و Frontend به درستی به آن متصل است.
 
 ### خطای OpenAI API
+
 - API Key را بررسی کنید
 - Base URL را بررسی کنید
 - اتصال اینترنت را بررسی کنید
@@ -346,6 +379,7 @@ npm install
 برای مشارکت در این پروژه، لطفاً [CONTRIBUTING.md](CONTRIBUTING.md) را مطالعه کنید.
 
 خلاصه:
+
 1. Fork کنید
 2. یک Branch جدید بسازید (`git checkout -b feature/amazing-feature`)
 3. تغییرات خود را Commit کنید (`git commit -m 'Add amazing feature'`)
@@ -366,6 +400,6 @@ npm install
 
 ---
 
-**نسخه:** 1.0.0 (MVP)  
-**تاریخ:** 2025  
+**نسخه:** 1.0.0 (MVP)
+**تاریخ:** 2025
 **وضعیت:** ✅ آماده استفاده

@@ -2,7 +2,7 @@
 
 ## ✅ وضعیت پروژه: کامل و آماده استفاده
 
-تاریخ تکمیل: 2025-11-02  
+تاریخ تکمیل: 2025-11-02
 نسخه: 1.0.0 (MVP)
 
 ---
@@ -15,7 +15,7 @@
 
 ## 📁 ساختار پروژه
 
-```
+```txt
 persian-search-engine/
 ├── 📘 Documentation (8 فایل)
 │   ├── README.md              # راهنمای کامل
@@ -72,9 +72,11 @@ persian-search-engine/
 └── 🐳 Docker
     ├── docker-compose.yml    # Multi-container Setup
     └── .env.example         # Environment Template
+
 ```
 
 **آمار:**
+
 - 📝 **30+** فایل کد و پیکربندی
 - 📚 **8** فایل مستندات جامع
 - 🔧 **2** اسکریپت راه‌اندازی خودکار
@@ -85,6 +87,7 @@ persian-search-engine/
 ## 🛠️ Stack فنی
 
 ### Backend
+
 | تکنولوژی | نسخه | هدف |
 |---------|------|-----|
 | Python | 3.11+ | زبان برنامه‌نویسی |
@@ -96,6 +99,7 @@ persian-search-engine/
 | SQLAlchemy | 2.0.25 | ORM |
 
 ### Frontend
+
 | تکنولوژی | نسخه | هدف |
 |---------|------|-----|
 | Next.js | 15.0.0 | React Framework |
@@ -109,6 +113,7 @@ persian-search-engine/
 ## 🎨 ویژگی‌های پیاده‌سازی‌شده
 
 ### ✅ Backend Features
+
 - [x] RESTful API با FastAPI
 - [x] RAG Pipeline کامل
 - [x] Semantic Search با Embeddings
@@ -121,6 +126,7 @@ persian-search-engine/
 - [x] Database Models
 
 ### ✅ Frontend Features
+
 - [x] Modern UI با Next.js 15
 - [x] Full RTL Support
 - [x] Dark/Light Theme
@@ -133,6 +139,7 @@ persian-search-engine/
 - [x] Persian Typography
 
 ### ✅ Documentation
+
 - [x] Comprehensive README
 - [x] Quick Start Guide
 - [x] Architecture Documentation
@@ -159,6 +166,7 @@ persian-search-engine/
 ## 🚀 راه‌اندازی (3 روش)
 
 ### 1️⃣ Manual (دستی)
+
 ```bash
 # Backend
 cd backend && python -m venv venv
@@ -168,20 +176,25 @@ python main.py
 
 # Frontend
 cd frontend && npm install && npm run dev
+
 ```
 
 ### 2️⃣ با اسکریپت
+
 ```bash
 # Backend
 cd backend && ./run.sh
 
 # Frontend
 cd frontend && ./run.sh
+
 ```
 
 ### 3️⃣ با Docker
+
 ```bash
 docker-compose up -d
+
 ```
 
 ---
@@ -189,9 +202,11 @@ docker-compose up -d
 ## 📈 مسیر راه
 
 ### ✅ نسخه 1.0.0 (فعلی) - MVP
+
 همه چیز کامل است!
 
 ### 🔜 نسخه 1.1.0 (آینده نزدیک)
+
 - [ ] احراز هویت
 - [ ] تاریخچه جست‌وجو
 - [ ] کش Redis
@@ -199,6 +214,7 @@ docker-compose up -d
 - [ ] Advanced Analytics
 
 ### 🚀 نسخه 1.2.0 (آینده)
+
 - [ ] PDF Support
 - [ ] Auto Translation
 - [ ] Voice Response (TTS)
@@ -206,6 +222,7 @@ docker-compose up -d
 - [ ] Multi-language
 
 ### 🌟 نسخه 2.0.0 (بلندمدت)
+
 - [ ] Microservices
 - [ ] Kubernetes
 - [ ] Real-time Features
@@ -216,21 +233,25 @@ docker-compose up -d
 ## 🎯 Use Cases
 
 ### 1. موتور جست‌وجوی شرکتی
+
 - افزودن مستندات داخلی
 - جست‌وجوی سریع در محتوا
 - پاسخ‌گویی خودکار
 
 ### 2. دستیار پژوهشی
+
 - جمع‌آوری اطلاعات از وب
 - خلاصه‌سازی هوشمند
 - منابع معتبر
 
 ### 3. پلتفرم آموزشی
+
 - پاسخ به سوالات دانشجویان
 - محتوای آموزشی
 - آزمون و ارزیابی
 
 ### 4. Customer Support
+
 - پاسخگویی خودکار
 - Knowledge Base
 - 24/7 Availability
@@ -240,25 +261,31 @@ docker-compose up -d
 ## 💡 نکات فنی مهم
 
 ### Embedding Model
+
 ```python
 # مدل پیش‌فرض
 "paraphrase-multilingual-mpnet-base-v2"
 # 768 dimensions
 # 50+ languages including Persian
+
 ```
 
 ### RAG Pipeline
-```
-Query → Normalize → Embed → Search → 
+
+```txt
+Query → Normalize → Embed → Search →
 Context → Prompt → LLM → Response
+
 ```
 
 ### Vector Search
+
 ```python
 # Qdrant Configuration
 Distance: COSINE
 Top-K: 5
 Threshold: 0.5
+
 ```
 
 ---
@@ -266,12 +293,14 @@ Threshold: 0.5
 ## 🔒 امنیت
 
 ### پیاده‌سازی شده
+
 - [x] Environment Variables
 - [x] API Key Masking
 - [x] Input Validation
 - [x] CORS Configuration
 
 ### برای Production
+
 - [ ] JWT Authentication
 - [ ] Rate Limiting
 - [ ] HTTPS Only
@@ -284,11 +313,13 @@ Threshold: 0.5
 ## 📊 Performance
 
 ### Backend
+
 - Response Time: < 2s (with caching)
 - Concurrent Users: 100+
 - Vector Search: < 100ms
 
 ### Frontend
+
 - First Load: < 1s
 - Lighthouse Score: 90+
 - Mobile Responsive: ✅
@@ -298,21 +329,28 @@ Threshold: 0.5
 ## 🧪 تست
 
 ### Unit Tests
+
 ```bash
 pytest backend/tests/unit/
+
 ```
 
 ### Integration Tests
+
 ```bash
 pytest backend/tests/integration/
+
 ```
 
 ### E2E Tests
+
 ```bash
 npm run test:e2e
+
 ```
 
 ### Manual Testing
+
 مستندات کامل در `backend/TESTING.md`
 
 ---
@@ -357,6 +395,7 @@ MIT License - آزاد برای استفاده شخصی و تجاری
 ## 🎉 نتیجه‌گیری
 
 یک MVP کامل و آماده برای استفاده با:
+
 - ✅ کد تمیز و مستند
 - ✅ معماری مقیاض‌پذیر
 - ✅ مستندات جامع
@@ -367,6 +406,6 @@ MIT License - آزاد برای استفاده شخصی و تجاری
 
 ---
 
-*آخرین به‌روزرسانی: 2025-11-02*  
-*نسخه: 1.0.0*  
+*آخرین به‌روزرسانی: 2025-11-02*
+*نسخه: 1.0.0*
 *وضعیت: ✅ Complete*

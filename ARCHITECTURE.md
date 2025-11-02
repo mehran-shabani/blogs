@@ -17,11 +17,13 @@
 - **Responsive Design:** طراحی واکنش‌گرا
 
 #### کامپوننت‌های اصلی:
+
 ```
 SearchBar: ورودی جست‌وجو + تنظیمات
 ResultCard: نمایش پاسخ + منابع
 ThemeToggle: تغییر تم تیره/روشن
 AdminPanel: مدیریت تنظیمات
+
 ```
 
 ### 2. لایه API (API Layer)
@@ -51,6 +53,7 @@ AdminPanel: مدیریت تنظیمات
 **فایل:** `backend/core/rag_engine.py`
 
 Pipeline جست‌وجو:
+
 ```
 1. نرمال‌سازی پرسش (با Hazm)
    ↓
@@ -68,12 +71,14 @@ Pipeline جست‌وجو:
 6. ارسال به OpenAI با RAG Prompt
    ↓
 7. برگرداندن پاسخ + منابع
+
 ```
 
 #### OpenAI Client
 **فایل:** `backend/core/openai_client.py`
 
 ویژگی‌ها:
+
 - پشتیبانی از Custom Base URL
 - Dynamic API Key
 - Chat Completion
@@ -84,6 +89,7 @@ Pipeline جست‌وجو:
 **فایل:** `backend/core/firecrawl_client.py`
 
 قابلیت‌ها:
+
 - Scrape تک URL
 - Crawl چند صفحه
 - استخراج Markdown
@@ -99,9 +105,11 @@ Collection: persian_documents
 Vectors: 768-dimensional (multilingual-mpnet)
 Distance: Cosine Similarity
 Storage: In-memory (MVP) / Persistent (Production)
+
 ```
 
 عملیات:
+
 - `add_documents()`: افزودن Embeddings
 - `search()`: جست‌وجوی معنایی
 - `delete_collection()`: پاک‌سازی
@@ -127,12 +135,14 @@ Storage: In-memory (MVP) / Persistent (Production)
 **کتابخانه:** Hazm
 
 عملیات:
+
 - حذف کاراکترهای اضافی
 - نرمال‌سازی فارسی
 - Tokenization
 
 #### Text Chunking
 استراتژی:
+
 - Sliding Window
 - Size: 500 tokens
 - Overlap: 50 tokens
@@ -140,10 +150,12 @@ Storage: In-memory (MVP) / Persistent (Production)
 
 #### Embedding Model
 **مدل پیش‌فرض:**
+
 ```
 sentence-transformers/paraphrase-multilingual-mpnet-base-v2
 Dimension: 768
 Languages: 50+ including Farsi
+
 ```
 
 **جایگزین‌ها:**
@@ -172,6 +184,7 @@ RAG Engine
     └→ Return Response
     ↓
 Frontend Display
+
 ```
 
 ### Scenario 2: جست‌وجو + Web
@@ -195,6 +208,7 @@ RAG Engine
     ├→ Build Context
     ├→ Call OpenAI
     └→ Return Response
+
 ```
 
 ### Scenario 3: افزودن URL
@@ -214,6 +228,7 @@ RAG Engine
     ├→ Generate Embeddings
     ├→ Store in Qdrant
     └→ Return Success
+
 ```
 
 ## 🔐 امنیت
@@ -274,18 +289,24 @@ RAG Engine
 ## 🧪 تست
 
 ### Backend
+
 ```bash
 pytest backend/tests/
+
 ```
 
 ### Frontend
+
 ```bash
 npm run test
+
 ```
 
 ### Integration
+
 ```bash
 pytest backend/tests/integration/
+
 ```
 
 ## 🚀 Deployment
@@ -309,6 +330,7 @@ RUN npm install
 COPY . .
 RUN npm run build
 CMD ["npm", "start"]
+
 ```
 
 ### Production Considerations

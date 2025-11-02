@@ -11,6 +11,7 @@
 # سپس Clone کنید:
 git clone https://github.com/your-username/persian-search-engine.git
 cd persian-search-engine
+
 ```
 
 ### 2. ایجاد Branch جدید
@@ -19,9 +20,11 @@ cd persian-search-engine
 git checkout -b feature/my-new-feature
 # یا
 git checkout -b fix/bug-description
+
 ```
 
 نام‌گذاری Branch:
+
 - `feature/...` برای ویژگی‌های جدید
 - `fix/...` برای رفع باگ
 - `docs/...` برای تغییرات مستندات
@@ -30,20 +33,24 @@ git checkout -b fix/bug-description
 ### 3. توسعه
 
 #### Backend
+
 ```bash
 cd backend
 source venv/bin/activate
 # کد خود را بنویسید
 python -m pytest  # تست‌ها را اجرا کنید
+
 ```
 
 #### Frontend
+
 ```bash
 cd frontend
 npm install
 # کد خود را بنویسید
 npm run lint  # بررسی Lint
 npm run build  # بررسی Build
+
 ```
 
 ### 4. Commit
@@ -54,9 +61,11 @@ npm run build  # بررسی Build
 git commit -m "feat: افزودن قابلیت جدید X"
 git commit -m "fix: رفع باگ Y"
 git commit -m "docs: به‌روزرسانی README"
+
 ```
 
 انواع Commit:
+
 - `feat`: ویژگی جدید
 - `fix`: رفع باگ
 - `docs`: تغییرات مستندات
@@ -69,6 +78,7 @@ git commit -m "docs: به‌روزرسانی README"
 
 ```bash
 git push origin feature/my-new-feature
+
 ```
 
 سپس در GitHub یک Pull Request باز کنید.
@@ -82,11 +92,11 @@ git push origin feature/my-new-feature
 def process_query(query: str, top_k: int = 5) -> Dict[str, Any]:
     """
     پردازش پرسش کاربر
-    
+
     Args:
         query: متن پرسش
         top_k: تعداد نتایج
-        
+
     Returns:
         Dict شامل پاسخ و منابع
     """
@@ -95,6 +105,7 @@ def process_query(query: str, top_k: int = 5) -> Dict[str, Any]:
 # استفاده از Docstrings
 # PEP 8 Style Guide
 # Black formatter
+
 ```
 
 ### TypeScript (Frontend)
@@ -114,6 +125,7 @@ export function SearchBar({ onSearch }: Props) {
 
 // Prettier formatter
 // ESLint rules
+
 ```
 
 ### کامنت‌گذاری
@@ -126,11 +138,13 @@ distance = Distance.COSINE
 # ❌ بد: توضیح چیستی (واضح است)
 # تنظیم distance به COSINE
 distance = Distance.COSINE
+
 ```
 
 ## 🧪 تست
 
 ### Backend
+
 ```bash
 # تست واحد
 pytest tests/unit/
@@ -140,15 +154,18 @@ pytest tests/integration/
 
 # تست با Coverage
 pytest --cov=backend tests/
+
 ```
 
 ### Frontend
+
 ```bash
 # تست کامپوننت‌ها
 npm run test
 
 # تست E2E
 npm run test:e2e
+
 ```
 
 ## 📝 مستندات
@@ -160,6 +177,7 @@ npm run test:e2e
 ## 🔍 Code Review
 
 Pull Request شما باید:
+
 - [ ] تست‌های مربوطه را پاس کند
 - [ ] مستندات را به‌روزرسانی کند
 - [ ] Style Guide را رعایت کند
@@ -176,6 +194,7 @@ Pull Request شما باید:
 ## 🐛 گزارش باگ
 
 برای گزارش باگ، لطفاً شامل موارد زیر باشید:
+
 - توضیح مشکل
 - مراحل بازتولید
 - رفتار مورد انتظار
@@ -186,6 +205,7 @@ Pull Request شما باید:
 ## ❓ سوالات
 
 سوال دارید؟
+
 - Issue باز کنید با تگ `question`
 - یا در Discussions پست کنید
 

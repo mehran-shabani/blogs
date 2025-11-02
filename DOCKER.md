@@ -15,13 +15,16 @@
 # ایجاد فایل .env در root پروژه
 cp .env.example .env
 # ویرایش و افزودن API Keys
+
 ```
 
 نمونه `.env`:
+
 ```env
 OPENAI_API_KEY=sk-your-key-here
 OPENAI_BASE_URL=https://api.gapgpt.app/v1
 FIRECRAWL_API_KEY=fc-your-key-here
+
 ```
 
 ### 2. Build و اجرا
@@ -35,11 +38,13 @@ docker-compose up
 
 # یا در background
 docker-compose up -d
+
 ```
 
 ## 🔧 دستورات مفید
 
 ### مشاهده لاگ‌ها
+
 ```bash
 # همه سرویس‌ها
 docker-compose logs -f
@@ -49,9 +54,11 @@ docker-compose logs -f backend
 
 # فقط frontend
 docker-compose logs -f frontend
+
 ```
 
 ### متوقف کردن
+
 ```bash
 # متوقف کردن
 docker-compose stop
@@ -61,15 +68,18 @@ docker-compose down
 
 # حذف همه چیز (شامل volumes)
 docker-compose down -v
+
 ```
 
 ### Restart
+
 ```bash
 # Restart یک سرویس
 docker-compose restart backend
 
 # Rebuild و restart
 docker-compose up -d --build backend
+
 ```
 
 ## 📊 سرویس‌ها
@@ -97,12 +107,14 @@ docker-compose exec backend bash
 
 # Frontend
 docker-compose exec frontend sh
+
 ```
 
 ### مشاهده logs خطا
 
 ```bash
 docker-compose logs --tail=100 backend
+
 ```
 
 ### بررسی health
@@ -113,6 +125,7 @@ curl http://localhost:8000/api/health
 
 # Qdrant
 curl http://localhost:6333/
+
 ```
 
 ## 🏗️ Production Build
@@ -120,6 +133,7 @@ curl http://localhost:6333/
 برای production، Dockerfile را ویرایش کنید:
 
 ### Frontend Dockerfile (Production)
+
 ```dockerfile
 FROM node:18-alpine AS builder
 WORKDIR /app
@@ -136,11 +150,14 @@ COPY --from=builder /app/package*.json ./
 RUN npm ci --production
 EXPOSE 3000
 CMD ["npm", "start"]
+
 ```
 
 ### Build برای Production
+
 ```bash
 docker-compose -f docker-compose.prod.yml up -d
+
 ```
 
 ## 🔒 امنیت
@@ -166,6 +183,7 @@ docker run --rm -v persian-search-engine_qdrant_storage:/data -v $(pwd):/backup 
 
 # Restore volume
 docker run --rm -v persian-search-engine_qdrant_storage:/data -v $(pwd):/backup alpine tar xzf /backup/qdrant_backup.tar.gz -C /data
+
 ```
 
 ## 🔄 به‌روزرسانی
@@ -179,11 +197,13 @@ docker-compose build --no-cache
 
 # Restart services
 docker-compose up -d
+
 ```
 
 ## 🐛 رفع مشکلات
 
 ### Port already in use
+
 ```bash
 # پیدا کردن process
 lsof -i :8000
@@ -192,22 +212,27 @@ sudo netstat -tulpn | grep :8000
 
 # متوقف کردن
 docker-compose down
+
 ```
 
 ### Out of disk space
+
 ```bash
 # پاکسازی
 docker system prune -a
 docker volume prune
+
 ```
 
 ### Image build failed
+
 ```bash
 # Clear cache
 docker builder prune
 
 # Rebuild
 docker-compose build --no-cache
+
 ```
 
 ## 📊 Monitoring (آینده)
@@ -218,11 +243,12 @@ docker-compose build --no-cache
     image: prom/prometheus
     ports:
       - "9090:9090"
-      
+
   grafana:
     image: grafana/grafana
     ports:
       - "3001:3000"
+
 ```
 
 ## 🔗 لینک‌های مفید
