@@ -1,0 +1,142 @@
+"""
+کلاینت Firecrawl برای کراول صفحات وب فارسی
+"""
+import requests
+from typing import Dict, List, Optional, Any
+from api.config import settings
+
+
+class FirecrawlClient:
+    """کلاینت Firecrawl برای استخراج محتوای وب"""
+    
+    def __init__(self):
+        self.api_key = settings.firecrawl_api_key
+        self.base_url = "https://api.firecrawl.dev/v1"
+    
+    def scrape_url(self, url: str) -> Optional[Dict[str, Any]]:
+        """استخراج محتوای یک URL"""
+        
+        if not self.api_key:
+            print("Firecrawl API key not configured")
+            return None
+        
+        headers = {
+            "Authorization": f"Bearer {self.api_key}",
+            "Content-Type": "application/json"
+        }
+        
+        payload = {
+            "url": url,
+            "formats": ["markdown", "html"],
+            "onlyMainContent": True
+        }
+        
+        try:
+            response = requests.post(
+                f"{self.base_url}/scrape",
+                headers=headers,
+                json=payload,
+                timeout=30
+            )
+            
+            if response.status_code == 200:
+                data = response.json()
+                return {
+                    "url": url,
+                    "title": data.get("data", {}).get("metadata", {}).get("title", ""),
+                    "content": data.get("data", {}).get("markdown", ""),
+                    "html": data.get("data", {}).get("html", ""),
+                    "metadata": data.get("data", {}).get("metadata", {})
+                }
+            else:
+                print(f"خطا در Firecrawl: {response.status_code} - {response.text}")
+                return None
+                
+        except Exception as e:
+            print(f"خطا در اتصال به Firecrawl: {e}")
+            return None
+    
+    def crawl_website(
+        self,
+        url: str,
+        max_pages: int = 10,
+        include_paths: Optional[List[str]] = None
+    ) -> List[Dict[str, Any]]:
+        """کراول چندین صفحه از یک وب‌سایت"""
+        
+        if not self.api_key:
+            print("Firecrawl API key not configured")
+            return []
+        
+        headers = {
+            "Authorization": f"Bearer {self.api_key}",
+            "Content-Type": "application/json"
+        }
+        
+        payload = {
+            "url": url,
+            "limit": max_pages,
+            "scrapeOptions": {
+                "formats": ["markdown"],
+                "onlyMainContent": True
+            }
+        }
+        
+        if include_paths:
+            payload["includePaths"] = include_paths
+        
+        try:
+            # شروع کراول
+            response = requests.post(
+                f"{self.base_url}/crawl",
+                headers=headers,
+                json=payload,
+                timeout=30
+            )
+            
+            if response.status_code == 200:
+                data = response.json()
+                crawl_id = data.get("id")
+                
+                # دریافت نتایج کراول
+                status_response = requests.get(
+                    f"{self.base_url}/crawl/{crawl_id}",
+                    headers=headers,
+                    timeout=60
+                )
+                
+                if status_response.status_code == 200:
+                    results = status_response.json()
+                    return results.get("data", [])
+            
+            return []
+            
+        except Exception as e:
+            print(f"خطا در کراول: {e}")
+            return []
+    
+    def search_web(self, query: str, max_results: int = 5) -> List[Dict[str, Any]]:
+        """جست‌وجو در وب و استخراج نتایج"""
+        
+        # برای MVP، از Google Search API یا سایر منابع استفاده می‌کنیم
+        # این یک پیاده‌سازی ساده است
+        
+        # در نسخه واقعی، می‌توان از سرویس‌هایی مانند SerpAPI استفاده کرد
+        search_results = []
+        
+        # برای الان، از یک لیست URL های پیش‌فرض استفاده می‌کنیم
+        default_persian_sites = [
+            f"https://fa.wikipedia.org/wiki/{query}",
+            f"https://www.google.com/search?q={query}+site:ir",
+        ]
+        
+        for url in default_persian_sites[:max_results]:
+            result = self.scrape_url(url)
+            if result:
+                search_results.append(result)
+        
+        return search_results
+
+
+# نمونه سراسری
+firecrawl_client = FirecrawlClient()
