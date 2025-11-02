@@ -1,51 +1,51 @@
-# ?? ??????? ??? Backend
+# 🧪 راهنمای تست Backend
 
-## ??? ???? API
+## تست دستی API
 
-### 1. ????? ????? ????
+### 1. بررسی سلامت سرور
 
 ```bash
 curl http://localhost:8000/api/health
 ```
 
-??????:
+انتظار:
 ```json
 {
   "status": "healthy",
-  "message": "?? API ?? ??? ???? ???"
+  "message": "🚀 API در حال اجرا است"
 }
 ```
 
-### 2. ??? ?????? URL
+### 2. تست افزودن URL
 
 ```bash
 curl -X POST "http://localhost:8000/api/ingest-url" \
   -H "Content-Type: application/json" \
   -d '{
-    "url": "https://fa.wikipedia.org/wiki/???_??????"
+    "url": "https://fa.wikipedia.org/wiki/هوش_مصنوعی"
   }'
 ```
 
-### 3. ??? ???????
+### 3. تست جست‌وجو
 
 ```bash
 curl -X POST "http://localhost:8000/api/search" \
   -H "Content-Type: application/json" \
   -d '{
-    "query": "??? ?????? ?????",
+    "query": "هوش مصنوعی چیست؟",
     "use_web_search": false,
     "top_k": 5
   }'
 ```
 
-### 4. ??? ???????
+### 4. تست تنظیمات
 
-#### ?????? ???????
+#### دریافت تنظیمات
 ```bash
 curl http://localhost:8000/api/config
 ```
 
-#### ??????????? ???????
+#### به‌روزرسانی تنظیمات
 ```bash
 curl -X POST "http://localhost:8000/api/config" \
   -H "Content-Type: application/json" \
@@ -55,52 +55,52 @@ curl -X POST "http://localhost:8000/api/config" \
   }'
 ```
 
-## ??????? ?? Swagger UI
+## استفاده از Swagger UI
 
-1. ?? ???? http://localhost:8000/docs ?????
-2. ???? API?? ?? ?? ???? ?????? ??? ????
+1. به آدرس http://localhost:8000/docs بروید
+2. تمام APIها را به صورت تعاملی تست کنید
 
-## ??? ?? Python
+## تست با Python
 
 ```python
 import requests
 
 BASE_URL = "http://localhost:8000"
 
-# ??? health
+# تست health
 response = requests.get(f"{BASE_URL}/api/health")
 print(response.json())
 
-# ??? search
+# تست search
 response = requests.post(f"{BASE_URL}/api/search", json={
-    "query": "??????? ?????",
+    "query": "تاریخچه ایران",
     "use_web_search": False,
     "top_k": 5
 })
 print(response.json())
 ```
 
-## ??? ???? (Unit Tests)
+## تست واحد (Unit Tests)
 
 ```bash
-# ??? pytest
+# نصب pytest
 pip install pytest pytest-asyncio
 
-# ????? ??????
+# اجرای تست‌ها
 pytest tests/ -v
 ```
 
-## ??? ??? (Load Testing)
+## تست بار (Load Testing)
 
 ```bash
-# ??? locust
+# نصب locust
 pip install locust
 
-# ????? ??? ???
+# اجرای تست بار
 locust -f tests/load_test.py
 ```
 
-????? `load_test.py`:
+نمونه `load_test.py`:
 
 ```python
 from locust import HttpUser, task, between
@@ -111,15 +111,15 @@ class SearchUser(HttpUser):
     @task
     def search(self):
         self.client.post("/api/search", json={
-            "query": "???",
+            "query": "تست",
             "use_web_search": False,
             "top_k": 5
         })
 ```
 
-## ??????
+## لاگ‌ها
 
 ```bash
-# ?????? ??????? ????
+# مشاهده لاگ‌های سرور
 tail -f backend.log
 ```

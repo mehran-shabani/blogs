@@ -1,78 +1,78 @@
-# ?? ??????? Docker
+# 🐳 راهنمای Docker
 
-??? ?????? ???? ??????? ?? Docker ???? ????? ????? ?? ??? ??????.
+این راهنما نحوه استفاده از Docker برای اجرای پروژه را شرح می‌دهد.
 
-## ?? ??????????
+## 📋 پیش‌نیازها
 
 - Docker
 - Docker Compose
 
-## ?? ?????????? ????
+## 🚀 راه‌اندازی سریع
 
-### 1. ????? Environment Variables
+### 1. تنظیم Environment Variables
 
 ```bash
-# ????? ???? .env ?? root ?????
+# ایجاد فایل .env در root پروژه
 cp .env.example .env
-# ?????? ? ?????? API Keys
+# ویرایش و افزودن API Keys
 ```
 
-????? `.env`:
+نمونه `.env`:
 ```env
 OPENAI_API_KEY=sk-your-key-here
 OPENAI_BASE_URL=https://api.gapgpt.app/v1
 FIRECRAWL_API_KEY=fc-your-key-here
 ```
 
-### 2. Build ? ????
+### 2. Build و اجرا
 
 ```bash
 # Build images
 docker-compose build
 
-# ????? ??? ????????
+# اجرای همه سرویس‌ها
 docker-compose up
 
-# ?? ?? background
+# یا در background
 docker-compose up -d
 ```
 
-## ?? ??????? ????
+## 🔧 دستورات مفید
 
-### ?????? ??????
+### مشاهده لاگ‌ها
 ```bash
-# ??? ????????
+# همه سرویس‌ها
 docker-compose logs -f
 
-# ??? backend
+# فقط backend
 docker-compose logs -f backend
 
-# ??? frontend
+# فقط frontend
 docker-compose logs -f frontend
 ```
 
-### ????? ????
+### متوقف کردن
 ```bash
-# ????? ????
+# متوقف کردن
 docker-compose stop
 
-# ??? containers
+# حذف containers
 docker-compose down
 
-# ??? ??? ??? (???? volumes)
+# حذف همه چیز (شامل volumes)
 docker-compose down -v
 ```
 
 ### Restart
 ```bash
-# Restart ?? ?????
+# Restart یک سرویس
 docker-compose restart backend
 
-# Rebuild ? restart
+# Rebuild و restart
 docker-compose up -d --build backend
 ```
 
-## ?? ????????
+## 📊 سرویس‌ها
 
 ### Backend
 - **Port:** 8000
@@ -87,9 +87,9 @@ docker-compose up -d --build backend
 - **Port:** 6333
 - **Dashboard:** http://localhost:6333/dashboard
 
-## ?? ?????
+## 🔍 دیباگ
 
-### ?????? ?? shell ?????
+### دسترسی به shell سرویس
 
 ```bash
 # Backend
@@ -99,13 +99,13 @@ docker-compose exec backend bash
 docker-compose exec frontend sh
 ```
 
-### ?????? logs ???
+### مشاهده logs خطا
 
 ```bash
 docker-compose logs --tail=100 backend
 ```
 
-### ????? health
+### بررسی health
 
 ```bash
 # Backend
@@ -115,9 +115,9 @@ curl http://localhost:8000/api/health
 curl http://localhost:6333/
 ```
 
-## ??? Production Build
+## 🏗️ Production Build
 
-???? production? Dockerfile ?? ?????? ????:
+برای production، Dockerfile را ویرایش کنید:
 
 ### Frontend Dockerfile (Production)
 ```dockerfile
@@ -138,27 +138,27 @@ EXPOSE 3000
 CMD ["npm", "start"]
 ```
 
-### Build ???? Production
+### Build برای Production
 ```bash
 docker-compose -f docker-compose.prod.yml up -d
 ```
 
-## ?? ?????
+## 🔒 امنیت
 
-?? **???? ???:**
+⚠️ **نکات مهم:**
 
-1. **????** API Keys ?? ?? Dockerfile ???? ?????
-2. ?? `.env` ???? secrets ??????? ????
-3. `.env` ?? ?? `.gitignore` ????? ????
-4. ?? production ?? Docker secrets ??????? ????
+1. **هرگز** API Keys را در Dockerfile قرار ندهید
+2. از `.env` برای secrets استفاده کنید
+3. `.env` را به `.gitignore` اضافه کنید
+4. در production از Docker secrets استفاده کنید
 
-## ?? Volumes
+## 📦 Volumes
 
 ```bash
-# ???? volumes
+# لیست volumes
 docker volume ls
 
-# ??? volume ???
+# حذف volume خاص
 docker volume rm persian-search-engine_qdrant_storage
 
 # Backup volume
@@ -168,7 +168,7 @@ docker run --rm -v persian-search-engine_qdrant_storage:/data -v $(pwd):/backup 
 docker run --rm -v persian-search-engine_qdrant_storage:/data -v $(pwd):/backup alpine tar xzf /backup/qdrant_backup.tar.gz -C /data
 ```
 
-## ?? ???????????
+## 🔄 به‌روزرسانی
 
 ```bash
 # Pull latest code
@@ -181,22 +181,22 @@ docker-compose build --no-cache
 docker-compose up -d
 ```
 
-## ?? ??? ??????
+## 🐛 رفع مشکلات
 
 ### Port already in use
 ```bash
-# ???? ???? process
+# پیدا کردن process
 lsof -i :8000
-# ??
+# یا
 sudo netstat -tulpn | grep :8000
 
-# ????? ????
+# متوقف کردن
 docker-compose down
 ```
 
 ### Out of disk space
 ```bash
-# ???????
+# پاکسازی
 docker system prune -a
 docker volume prune
 ```
@@ -210,10 +210,10 @@ docker builder prune
 docker-compose build --no-cache
 ```
 
-## ?? Monitoring (?????)
+## 📊 Monitoring (آینده)
 
 ```yaml
-# docker-compose.yml - ?????? monitoring
+# docker-compose.yml - افزودن monitoring
   prometheus:
     image: prom/prometheus
     ports:
@@ -225,7 +225,7 @@ docker-compose build --no-cache
       - "3001:3000"
 ```
 
-## ?? ???????? ????
+## 🔗 لینک‌های مفید
 
 - [Docker Documentation](https://docs.docker.com/)
 - [Docker Compose Documentation](https://docs.docker.com/compose/)

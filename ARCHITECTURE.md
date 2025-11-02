@@ -1,98 +1,98 @@
-# ??? ?????? ??? ????? ???????? ?????
+# 🏗️ معماری فنی موتور جست‌وجوی فارسی
 
-## ???? ???
+## نمای کلی
 
-??? ??? ?????? ??? ????? ?? ?? ????? ??? ??????.
+این سند معماری فنی سیستم را به تفصیل شرح می‌دهد.
 
-## ?? ???????? ??????
+## 📐 لایه‌های معماری
 
-### 1. ???? ????? (Presentation Layer)
-**????????:** Next.js 15 + React 18 + TypeScript
+### 1. لایه ارائه (Presentation Layer)
+**تکنولوژی:** Next.js 15 + React 18 + TypeScript
 
-- **App Router:** ??????? ?? App Directory ???? Next.js
-- **Server Components:** ???? ?????????? ??????
-- **Client Components:** ???? ??????? ??????
-- **RTL Support:** ???????? ???? ?? ??????????
-- **Dark Mode:** ?? Context API ? Tailwind
-- **Responsive Design:** ????? ?????????
+- **App Router:** استفاده از App Directory جدید Next.js
+- **Server Components:** برای بهینه‌سازی عملکرد
+- **Client Components:** برای تعاملات کاربری
+- **RTL Support:** پشتیبانی کامل از راست‌به‌چپ
+- **Dark Mode:** با Context API و Tailwind
+- **Responsive Design:** طراحی واکنش‌گرا
 
-#### ???????????? ????:
+#### کامپوننت‌های اصلی:
 ```
-SearchBar: ????? ??????? + ???????
-ResultCard: ????? ???? + ?????
-ThemeToggle: ????? ?? ????/????
-AdminPanel: ?????? ???????
+SearchBar: ورودی جست‌وجو + تنظیمات
+ResultCard: نمایش پاسخ + منابع
+ThemeToggle: تغییر تم تیره/روشن
+AdminPanel: مدیریت تنظیمات
 ```
 
-### 2. ???? API (API Layer)
-**????????:** FastAPI + Pydantic
+### 2. لایه API (API Layer)
+**تکنولوژی:** FastAPI + Pydantic
 
 #### Endpoints:
 
 **POST /api/search**
-- ?????: query, use_web_search, top_k
-- ?????: answer, sources, search_results
-- ??????: Query ? Embedding ? Search ? RAG ? Response
+- ورودی: query, use_web_search, top_k
+- خروجی: answer, sources, search_results
+- فرآیند: Query → Embedding → Search → RAG → Response
 
 **POST /api/ingest-url**
-- ?????: URL
-- ?????: success, message, chunks_count
-- ??????: Scrape ? Normalize ? Chunk ? Embed ? Store
+- ورودی: URL
+- خروجی: success, message, chunks_count
+- فرآیند: Scrape → Normalize → Chunk → Embed → Store
 
 **GET/POST /api/config**
-- ?????? ??????? OpenAI
+- مدیریت تنظیمات OpenAI
 
 **GET /api/health**
 - Health Check
 
-### 3. ???? ???? ???????? (Business Logic Layer)
+### 3. لایه منطق کسب‌وکار (Business Logic Layer)
 
 #### RAG Engine
-**????:** `backend/core/rag_engine.py`
+**فایل:** `backend/core/rag_engine.py`
 
-Pipeline ???????:
+Pipeline جست‌وجو:
 ```
-1. ?????????? ???? (?? Hazm)
-   ?
-2. ????? Embedding
-   ?
-3. ???????? ?????? ?? Vector Store
-   ?
-4. ??? ????? < threshold:
-   - ??????? ?? ?? ?? Firecrawl
-   - Ingestion ?????? ????
-   - ???????? ????
-   ?
-5. ????? Context ?? ?????
-   ?
-6. ????? ?? OpenAI ?? RAG Prompt
-   ?
-7. ????????? ???? + ?????
+1. نرمال‌سازی پرسش (با Hazm)
+   ↓
+2. تولید Embedding
+   ↓
+3. جست‌وجوی معنایی در Vector Store
+   ↓
+4. اگر نتیجه < threshold:
+   - جست‌وجو در وب با Firecrawl
+   - Ingestion محتوای جدید
+   - جست‌وجوی مجدد
+   ↓
+5. تولید Context از نتایج
+   ↓
+6. ارسال به OpenAI با RAG Prompt
+   ↓
+7. برگرداندن پاسخ + منابع
 ```
 
 #### OpenAI Client
-**????:** `backend/core/openai_client.py`
+**فایل:** `backend/core/openai_client.py`
 
-????????:
-- ???????? ?? Custom Base URL
+ویژگی‌ها:
+- پشتیبانی از Custom Base URL
 - Dynamic API Key
 - Chat Completion
 - Embeddings
 - RAG Prompt Engineering
 
 #### Firecrawl Client
-**????:** `backend/core/firecrawl_client.py`
+**فایل:** `backend/core/firecrawl_client.py`
 
-?????????:
-- Scrape ?? URL
-- Crawl ??? ????
-- ??????? Markdown
-- Web Search (???? ?????)
+قابلیت‌ها:
+- Scrape تک URL
+- Crawl چند صفحه
+- استخراج Markdown
+- Web Search (برای آینده)
 
-### 4. ???? ???? (Data Layer)
+### 4. لایه داده (Data Layer)
 
 #### Vector Store (Qdrant)
-**????:** `backend/db/vector_store.py`
+**فایل:** `backend/db/vector_store.py`
 
 ```python
 Collection: persian_documents
@@ -101,13 +101,13 @@ Distance: Cosine Similarity
 Storage: In-memory (MVP) / Persistent (Production)
 ```
 
-??????:
-- `add_documents()`: ?????? Embeddings
-- `search()`: ???????? ??????
-- `delete_collection()`: ????????
+عملیات:
+- `add_documents()`: افزودن Embeddings
+- `search()`: جست‌وجوی معنایی
+- `delete_collection()`: پاک‌سازی
 
 #### Database Models (SQLAlchemy)
-**????:** `backend/db/models.py`
+**فایل:** `backend/db/models.py`
 
 **Document:**
 - url, title, content, metadata
@@ -121,102 +121,102 @@ Storage: In-memory (MVP) / Persistent (Production)
 - query, response, sources
 - search_type, timestamp
 
-### 5. ???? ?????? ???? (NLP Layer)
+### 5. لایه پردازش زبان (NLP Layer)
 
 #### Text Normalization
-**????????:** Hazm
+**کتابخانه:** Hazm
 
-??????:
-- ??? ?????????? ?????
-- ?????????? ?????
+عملیات:
+- حذف کاراکترهای اضافی
+- نرمال‌سازی فارسی
 - Tokenization
 
 #### Text Chunking
-????????:
+استراتژی:
 - Sliding Window
 - Size: 500 tokens
 - Overlap: 50 tokens
-- ??? ????
+- حفظ معنا
 
 #### Embedding Model
-**??? ???????:**
+**مدل پیش‌فرض:**
 ```
 sentence-transformers/paraphrase-multilingual-mpnet-base-v2
 Dimension: 768
 Languages: 50+ including Farsi
 ```
 
-**??????????:**
+**جایگزین‌ها:**
 - LaBSE (Google)
 - HooshvareLab/bert-fa-base-uncased
 
-## ?? ????? ???? (Data Flow)
+## 🔄 جریان داده (Data Flow)
 
-### Scenario 1: ???????? ??????
+### Scenario 1: جست‌وجوی معمولی
 
-```mermaid
+```
 User Input
-    ?
+    ↓
 Frontend (Next.js)
-    ?
+    ↓
 POST /api/search
-    ?
+    ↓
 RAG Engine
-    ?? Normalize Query
-    ?? Generate Embedding
-    ?? Search Vector Store
-    ?   ?
-    ?   Found Results
-    ?? Build Context
-    ?? Call OpenAI
-    ?? Return Response
-    ?
+    ├→ Normalize Query
+    ├→ Generate Embedding
+    ├→ Search Vector Store
+    │   ↓
+    │   Found Results
+    ├→ Build Context
+    ├→ Call OpenAI
+    └→ Return Response
+    ↓
 Frontend Display
 ```
 
-### Scenario 2: ??????? + Web
+### Scenario 2: جست‌وجو + Web
 
-```mermaid
+```
 User Input + Web Search Enabled
-    ?
+    ↓
 Frontend (Next.js)
-    ?
+    ↓
 POST /api/search (use_web_search=true)
-    ?
+    ↓
 RAG Engine
-    ?? Search Vector Store
-    ?   ?
-    ?   Insufficient Results
-    ?? Firecrawl Search
-    ?? Scrape URLs
-    ?? Chunk & Embed
-    ?? Add to Vector Store
-    ?? Search Again
-    ?? Build Context
-    ?? Call OpenAI
-    ?? Return Response
+    ├→ Search Vector Store
+    │   ↓
+    │   Insufficient Results
+    ├→ Firecrawl Search
+    ├→ Scrape URLs
+    ├→ Chunk & Embed
+    ├→ Add to Vector Store
+    ├→ Search Again
+    ├→ Build Context
+    ├→ Call OpenAI
+    └→ Return Response
 ```
 
-### Scenario 3: ?????? URL
+### Scenario 3: افزودن URL
 
-```mermaid
+```
 Admin Panel
-    ?
+    ↓
 POST /api/ingest-url
-    ?
+    ↓
 Firecrawl Client
-    ?? Scrape URL
-    ?? Extract Content
-    ?
+    ├→ Scrape URL
+    ├→ Extract Content
+    ↓
 RAG Engine
-    ?? Normalize Text
-    ?? Chunk Text
-    ?? Generate Embeddings
-    ?? Store in Qdrant
-    ?? Return Success
+    ├→ Normalize Text
+    ├→ Chunk Text
+    ├→ Generate Embeddings
+    ├→ Store in Qdrant
+    └→ Return Success
 ```
 
-## ?? ?????
+## 🔐 امنیت
 
 ### Authentication (Future)
 - JWT Tokens
@@ -233,7 +233,7 @@ RAG Engine
 - URL Validation
 - Query Sanitization
 
-## ? ??????????
+## ⚡ بهینه‌سازی
 
 ### Frontend
 - Server-Side Rendering (SSR)
@@ -253,7 +253,7 @@ RAG Engine
 - Vector Compression
 - Batch Operations
 
-## ?? ?????????? (Future)
+## 📊 مانیتورینگ (Future)
 
 ### Metrics
 - Request Latency
@@ -271,7 +271,7 @@ RAG Engine
 - Performance Degradation
 - Quota Limits
 
-## ?? ???
+## 🧪 تست
 
 ### Backend
 ```bash
@@ -288,9 +288,9 @@ npm run test
 pytest backend/tests/integration/
 ```
 
-## ?? Deployment
+## 🚀 Deployment
 
-### Docker Support (Future)
+### Docker Support
 
 ```dockerfile
 # Backend
@@ -332,7 +332,7 @@ CMD ["npm", "start"]
    - Error Tracking (Sentry)
    - Analytics
 
-## ?? References
+## 📚 References
 
 - [FastAPI Documentation](https://fastapi.tiangolo.com/)
 - [Next.js Documentation](https://nextjs.org/docs)
